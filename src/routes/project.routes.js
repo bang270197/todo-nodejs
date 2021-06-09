@@ -19,4 +19,5 @@ route.put(
     configImage.upload.single("thumbnail"),
     projectController.update
 );
+route.put("/project/status/:id", projectController.updateStatus);
 module.exports = route;

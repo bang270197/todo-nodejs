@@ -2,6 +2,24 @@ const User = require("../model/User");
 const Project = require("../model/Project");
 const projectService = require("../service/ProjectService");
 const { validationResult } = require("express-validator");
+
+//[put] api/project/status/:id
+exports.updateStatus = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const project = await Project.findOne({ _id: id });
+        project.status = project.status === "done" ? "undone" : "done";
+        await project.save();
+        res.status(200).json({
+            message: "Update status thành công!",
+            body: project,
+        });
+    } catch (err) {
+        return res.status(500).send("Server error" + err.message);
+    }
+};
+
+//[put] api/project/:id
 exports.update = async (req, res) => {
     const id = req.params.id;
     const project = await Project.findOne({ _id: id });
