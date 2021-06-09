@@ -2,6 +2,24 @@ const Project = require("../model/Project");
 const User = require("../model/User");
 const authService = require("../service/AuthToken");
 
+exports.update = async (req) => {
+    var file = req.file;
+    let math = ["image/png", "image/jpeg"];
+    if (math.indexOf(file.mimetype) === -1) {
+        let errorMess = `The file <strong>${file.originalname}</strong> is invalid. Only allowed to upload image jpeg or png.`;
+        throw Error(errorMess);
+    }
+    const body = req.body;
+    body.thumbnail = file.path;
+    const project = await Project.findOneAndUpdate(
+        {
+            _id: req.params.id,
+        },
+        body
+    );
+    return project;
+};
+
 exports.addUserToProject = async (body) => {
     const { userId, projectId } = body;
     const user = await User.aggregate([
@@ -47,6 +65,14 @@ exports.showAll = async (req) => {
     const projects = await Project.aggregate([
         {
             $lookup: {
+                from: "tasks",
+                localField: "tasks",
+                foreignField: "_id",
+                as: "listTask",
+            },
+        },
+        {
+            $lookup: {
                 from: "users",
                 localField: "users",
                 foreignField: "_id",
@@ -61,14 +87,18 @@ exports.showAll = async (req) => {
         },
         {
             $project: {
-                _id: 0,
+                _id: 1,
                 title: 1,
                 detail: 1,
                 createBy: 1,
                 thumbnail: 1,
                 status: 1,
                 createdAt: 1,
-                listUser: 1,
+                tasks: 1,
+                "listUser.username": 1,
+                "listUser.email": 1,
+                "listUser._id": 1,
+                listTask: 1,
                 // users: { $arrayElemAt: ["$listUser", 0] },
             },
         },

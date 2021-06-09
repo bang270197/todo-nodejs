@@ -2,6 +2,15 @@ const User = require("../model/User");
 const Project = require("../model/Project");
 const projectService = require("../service/ProjectService");
 const { validationResult } = require("express-validator");
+exports.update = async (req, res) => {
+    const id = req.params.id;
+    const project = await Project.findOne({ _id: id });
+    if (!project || typeof project === "undefined") {
+        return res.json({ message: "Project không tồn tại" });
+    }
+    const projectUpdate = await projectService.update(req);
+    res.json({ message: "Update Project thành công!", projectUpdate });
+};
 //[DELETE] /api/project/:id
 exports.delete = async (req, res) => {
     try {
@@ -42,7 +51,10 @@ exports.create = async (req, res) => {
 // [GET] api/project
 exports.show = async (req, res) => {
     try {
-        const projects = await projectService.showAll(req);
+        let [total_record, projects] = await Promise.all([
+            Project.countDocuments({}),
+            projectService.showAll(req),
+        ]);
         if (projects === null || typeof projects === "undefined") {
             res.staus(200).json({
                 message: "Danh sách project trống!!",
@@ -50,6 +62,7 @@ exports.show = async (req, res) => {
         }
         res.status(200).json({
             message: "Danh sách project",
+            countProject: total_record,
             projects: projects,
         });
     } catch (err) {

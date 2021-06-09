@@ -8,20 +8,15 @@ const configImage = require("../config/configImage");
 route.post(
     "/project",
     configImage.upload.single("thumbnail"),
-    authMiddleware.isAuthMiddleware,
     validate.validateCreateProject,
     projectController.create
 );
-route.get("/project", authMiddleware.isAuthMiddleware, projectController.show);
-route.delete(
+route.get("/project", projectController.show);
+route.delete("/project/:id", projectController.delete);
+route.post("/project/user", projectController.addUser);
+route.put(
     "/project/:id",
-    authMiddleware.isAuthMiddleware,
-    projectController.delete
+    configImage.upload.single("thumbnail"),
+    projectController.update
 );
-route.post(
-    "/project/user",
-    authMiddleware.isAuthMiddleware,
-    projectController.addUser
-);
-
 module.exports = route;
