@@ -3,7 +3,13 @@ const Project = require("../model/Project");
 const projectService = require("../service/ProjectService");
 const { validationResult } = require("express-validator");
 
-//[put] api/project/status/:id
+exports.count = async (req, res) => {
+    const id = req.params.id;
+    console.log("");
+    res.json({ message: "ok" });
+};
+
+//[PUT] api/project/status/:id
 exports.updateStatus = async (req, res) => {
     try {
         const id = req.params.id;

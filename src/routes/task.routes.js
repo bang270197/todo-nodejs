@@ -6,4 +6,7 @@ const taskController = require("../controller/task.controller");
 route.post("/task/:id", taskController.create);
 route.put("/task/addContent/:id", taskController.addContent);
 route.delete("/task/:id", taskController.delete);
+route.post("/task/:idTask/user/:idUser", taskController.addUserToTask);
+route.put("/task/priority/:id", taskController.updatePriority);
+route.put("/task/status/:id", taskController.updateStatus);
 module.exports = route;
