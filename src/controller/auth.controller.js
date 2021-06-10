@@ -25,6 +25,7 @@ exports.register = async (req, res) => {
                 username: username,
                 password: newPassword,
                 email: email,
+                role: "user",
             };
             const user = await User.create(body);
             if (user) {
@@ -70,6 +71,7 @@ exports.login = async (req, res) => {
         const accessTokenSecret = process.env.SINGNATURE;
         const data = {
             username: username,
+            role: user.role,
         };
         const accessToken = await authMethod.generateToken(
             data,
@@ -99,6 +101,7 @@ exports.login = async (req, res) => {
             accessToken,
             refreshToken,
             username: user.username,
+            role: user.role,
         });
     } catch (e) {
         return res.status(500).json({

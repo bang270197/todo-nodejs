@@ -6,6 +6,7 @@ const user = new Schema(
         password: { type: String, defauld: "" },
         email: { type: String, defauld: "" },
         refreshToken: { type: String, defauld: "" },
+        role: { type: String, defauld: "" },
         projects: [
             {
                 type: Schema.Types.ObjectId,

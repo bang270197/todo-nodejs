@@ -1,6 +1,11 @@
 const Task = require("../model/Task");
 const taskService = require("../service/TaskService");
 
+//PUT /task/:id
+exports.update = async (req, res) => {
+    const body = req.body;
+};
+
 //PUT /task/priority/:id
 exports.updatePriority = async (req, res) => {
     try {
@@ -31,16 +36,22 @@ exports.updateStatus = async (req, res) => {
 //POST /task/user
 exports.addUserToTask = async (req, res) => {
     try {
-        const task = await taskService.addUserToTask(req);
-        if (!task || typeof task === "undefined") {
-            return res.status(401).status({
-                message: "Thêm user cho task không thành công",
+        if (req.role === "admin") {
+            const task = await taskService.addUserToTask(req);
+            if (!task || typeof task === "undefined") {
+                return res.status(401).status({
+                    message: "Thêm user cho task không thành công",
+                });
+            }
+            return res.json({
+                message: "Thêm user cho task thành công",
+                body: task,
+            });
+        } else {
+            res.status(200).json({
+                message: "Bạn không có quyền thêm user cho task",
             });
         }
-        return res.json({
-            message: "Thêm user cho task thành công",
-            body: task,
-        });
     } catch (err) {
         return res.status(500).json({ message: "Server error" + err.message });
     }
@@ -49,14 +60,22 @@ exports.addUserToTask = async (req, res) => {
 // PUT /api/task/addContent/:id
 exports.addContent = async (req, res) => {
     try {
-        const taskContent = await taskService.addContent(req);
-        if (!taskContent || typeof taskContent === "undefined") {
-            res.status(401).status({ message: "Thêm task không thành công" });
+        if (req.role === "admin") {
+            const taskContent = await taskService.addContent(req);
+            if (!taskContent || typeof taskContent === "undefined") {
+                res.status(401).status({
+                    message: "Thêm task không thành công",
+                });
+            }
+            res.status(200).json({
+                message: "Thêm task thành công",
+                body: taskContent,
+            });
+        } else {
+            res.status(200).json({
+                message: "Bạn không có quyền thêm nội dung task task ",
+            });
         }
-        res.status(200).json({
-            message: "Thêm task thành công",
-            body: taskContent,
-        });
     } catch (err) {
         return res.status(500).json({ message: "Server error" + err.message });
     }
@@ -65,10 +84,16 @@ exports.addContent = async (req, res) => {
 // POST /api/task/:id
 exports.create = async (req, res) => {
     try {
-        const task = await taskService.create(req);
-        return res
-            .status(200)
-            .json({ message: "Thêm task thành công", body: task });
+        if (req.role === "admin") {
+            const task = await taskService.create(req);
+            return res
+                .status(200)
+                .json({ message: "Thêm task thành công", body: task });
+        } else {
+            res.status(200).json({
+                message: "Bạn không có quyền thêm task ",
+            });
+        }
     } catch (err) {
         return res.status(500).json({ message: "Server error" + err.message });
     }
@@ -76,15 +101,21 @@ exports.create = async (req, res) => {
 // [DELETE] /api/task/:id
 exports.delete = async (req, res) => {
     try {
-        const id = req.params.id;
-        const task = await Task.findOne({ _id: id });
-        if (!task || typeof task === "undefined") {
-            return res.status(401).json({
-                message: "Task không tồn tại!!",
+        if (req.role === "admin") {
+            const id = req.params.id;
+            const task = await Task.findOne({ _id: id });
+            if (!task || typeof task === "undefined") {
+                return res.status(401).json({
+                    message: "Task không tồn tại!!",
+                });
+            }
+            await Task.deleteOne({ _id: id });
+            return res.status(200).json({ message: "Xóa task thành công!!" });
+        } else {
+            return res.status(200).json({
+                message: "Bạn không có quyền xóa task ",
             });
         }
-        await Task.deleteOne({ _id: id });
-        return res.status(200).json({ message: "Xóa task thành công!!" });
     } catch (err) {
         return res.status(500).send({ message: "Server error" + err.message });
     }

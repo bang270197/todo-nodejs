@@ -21,21 +21,13 @@ exports.update = async (req) => {
 };
 
 exports.addUserToProject = async (body) => {
-    const { userId, projectId } = body;
-    const user = await User.aggregate([
-        {
-            $match: { _id: userId },
-        },
-    ]);
-    const project = await Project.findOne([
-        {
-            $match: { _id: projectId },
-        },
-    ]);
-    if (!project) {
+    const { projectId, userId } = body;
+    const user = await User.findOne({ _id: userId });
+    const project = await Project.findOne({ _id: projectId });
+    if (!project || typeof project === "undefined") {
         throw Error("Not found project");
     }
-    if (!user) {
+    if (!user || typeof user === "undefined") {
         throw Error("Not found user");
     }
     project.users.push(userId);

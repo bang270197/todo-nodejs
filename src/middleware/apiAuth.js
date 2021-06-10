@@ -18,7 +18,9 @@ exports.isAuthMiddleware = async (req, res, next) => {
         return res.status(401).json({ message: "Bạn không có quyền truy cập" });
     }
     const userName = verifyToken.user.username;
+    const role = verifyToken.user.role;
     const user = await User.findOne({ username: userName });
     req.user = user;
+    req.role = role;
     return next();
 };
