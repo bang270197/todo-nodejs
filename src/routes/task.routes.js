@@ -10,4 +10,5 @@ route.post("/task/:idTask/user/:idUser", taskController.addUserToTask);
 route.put("/task/priority/:id", taskController.updatePriority);
 route.put("/task/status/:id", taskController.updateStatus);
 route.put("/task/:id", taskController.update);
+route.get("/task/:id", taskController.showTask);
 module.exports = route;

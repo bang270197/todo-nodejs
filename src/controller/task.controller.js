@@ -1,6 +1,8 @@
 const Task = require("../model/Task");
 const taskService = require("../service/TaskService");
 
+exports.showTask = async (req, res) => {};
+
 //PUT /task/:id
 exports.update = async (req, res) => {
     try {
@@ -124,6 +126,6 @@ exports.delete = async (req, res) => {
             });
         }
     } catch (err) {
-        return res.status(500).send({ message: "Server error " + err.message });
+        return res.status(500).json({ message: "Server error " + err.message });
     }
 };

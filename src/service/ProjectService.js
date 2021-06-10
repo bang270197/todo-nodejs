@@ -30,10 +30,14 @@ exports.addUserToProject = async (body) => {
     if (!user || typeof user === "undefined") {
         throw Error("Not found user");
     }
-    project.users.push(userId);
-    await project.save();
-    user.projects.push(projectId);
-    await user.save();
+    if (!project.users.includes(userId)) {
+        project.users.push(userId);
+        await project.save();
+    }
+    if (!user.projects.includes(projectId)) {
+        user.projects.push(projectId);
+        await user.save();
+    }
     return project;
 };
 exports.createService = async (req) => {
@@ -86,7 +90,6 @@ exports.showAll = async (req) => {
                 thumbnail: 1,
                 status: 1,
                 createdAt: 1,
-                tasks: 1,
                 "listUser.username": 1,
                 "listUser.email": 1,
                 "listUser._id": 1,

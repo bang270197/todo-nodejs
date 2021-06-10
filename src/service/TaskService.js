@@ -25,8 +25,10 @@ exports.addUserToTask = async (req) => {
     if (!user || typeof user === "undefined") throw new Error("không tồn tại");
     task.user = userId;
     await task.save();
-    user.tasks.push(taskid);
-    await user.save();
+    if (!user.tasks.includes(taskid)) {
+        user.tasks.push(taskid);
+        await user.save();
+    }
     return task;
 };
 exports.create = async (req) => {
