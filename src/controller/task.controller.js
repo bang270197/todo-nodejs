@@ -3,7 +3,14 @@ const taskService = require("../service/TaskService");
 
 //PUT /task/:id
 exports.update = async (req, res) => {
-    const body = req.body;
+    try {
+        const task = await taskService.update(req, res);
+        return res
+            .status(200)
+            .json({ message: "Sửa task thành công", body: task });
+    } catch (err) {
+        return res.status(500).json({ message: "Server error " + err.message });
+    }
 };
 
 //PUT /task/priority/:id
@@ -16,7 +23,7 @@ exports.updatePriority = async (req, res) => {
             .status(200)
             .json({ message: "Update priority thành công", body: task });
     } catch (err) {
-        return res.status(500).json({ message: "Server error" + err.message });
+        return res.status(500).json({ message: "Server error " + err.message });
     }
 };
 // PUT /task/status/:id
@@ -29,7 +36,7 @@ exports.updateStatus = async (req, res) => {
             .status(200)
             .json({ message: "Update status thành công", body: task });
     } catch (err) {
-        return res.status(500).json({ message: "Server error" + err.message });
+        return res.status(500).json({ message: "Server error " + err.message });
     }
 };
 
@@ -53,7 +60,7 @@ exports.addUserToTask = async (req, res) => {
             });
         }
     } catch (err) {
-        return res.status(500).json({ message: "Server error" + err.message });
+        return res.status(500).json({ message: "Server error " + err.message });
     }
 };
 
@@ -61,7 +68,7 @@ exports.addUserToTask = async (req, res) => {
 exports.addContent = async (req, res) => {
     try {
         if (req.role === "admin") {
-            const taskContent = await taskService.addContent(req);
+            const taskContent = await taskService.addContent(req, res);
             if (!taskContent || typeof taskContent === "undefined") {
                 res.status(401).status({
                     message: "Thêm task không thành công",
@@ -77,7 +84,7 @@ exports.addContent = async (req, res) => {
             });
         }
     } catch (err) {
-        return res.status(500).json({ message: "Server error" + err.message });
+        return res.status(500).json({ message: "Server error " + err.message });
     }
 };
 
@@ -95,7 +102,7 @@ exports.create = async (req, res) => {
             });
         }
     } catch (err) {
-        return res.status(500).json({ message: "Server error" + err.message });
+        return res.status(500).json({ message: "Server error " + err.message });
     }
 };
 // [DELETE] /api/task/:id
@@ -117,6 +124,6 @@ exports.delete = async (req, res) => {
             });
         }
     } catch (err) {
-        return res.status(500).send({ message: "Server error" + err.message });
+        return res.status(500).send({ message: "Server error " + err.message });
     }
 };

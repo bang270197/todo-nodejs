@@ -45,7 +45,7 @@ exports.register = async (req, res) => {
             }
         }
     } catch (err) {
-        return res.status(500).send("Server error");
+        return res.status(500).send("Server error" + err.message);
     }
 };
 //POST /api/login
@@ -105,7 +105,7 @@ exports.login = async (req, res) => {
         });
     } catch (e) {
         return res.status(500).json({
-            message: "Server error",
+            message: "Server error" + e.message,
         });
     }
 };
@@ -132,7 +132,7 @@ exports.update = async (req, res) => {
         return res.json({ message: "Thay đổi mật thành công" });
     } catch (error) {
         return res.status(500).json({
-            message: "Server error",
+            message: "Server error" + error.message,
         });
     }
 };

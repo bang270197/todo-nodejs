@@ -19,7 +19,7 @@ exports.count = async (req, res) => {
             countTask: count_task,
         });
     } catch (err) {
-        return res.status(500).send("Server error" + err.message);
+        return res.status(500).send("Server error " + err.message);
     }
 };
 
@@ -41,7 +41,7 @@ exports.updateStatus = async (req, res) => {
             });
         }
     } catch (err) {
-        return res.status(500).send("Server error" + err.message);
+        return res.status(500).send("Server error " + err.message);
     }
 };
 
@@ -62,7 +62,7 @@ exports.update = async (req, res) => {
             });
         }
     } catch (err) {
-        return res.status(500).send("Server error" + err.message);
+        return res.status(500).send("Server error " + err.message);
     }
 };
 //[DELETE] /api/project/:id
@@ -82,7 +82,7 @@ exports.delete = async (req, res) => {
             });
         }
     } catch (err) {
-        return res.status(500).send("Server error" + err.message);
+        return res.status(500).send("Server error " + err.message);
     }
 };
 //[POST] /api/project
@@ -111,7 +111,7 @@ exports.create = async (req, res) => {
         }
     } catch (err) {
         // log.error(`Create project error: ${err.message}`);
-        return res.status(500).send("Server error" + err.message);
+        return res.status(500).send("Server error " + err.message);
     }
 };
 // [GET] api/project
@@ -133,7 +133,7 @@ exports.show = async (req, res) => {
         });
     } catch (err) {
         // log.error(`Get list project error: ${err.message}`);
-        return res.status(500).send("Server error" + err.message);
+        return res.status(500).send("Server error " + err.message);
     }
 };
 // [POST] api/project/user
@@ -155,6 +155,6 @@ exports.addUser = async (req, res) => {
         }
     } catch (err) {
         // log.error(`Get list project error: ${err.message}`);
-        return res.status(500).send("Server error" + err.message);
+        return res.status(500).send("Server error " + err.message);
     }
 };
