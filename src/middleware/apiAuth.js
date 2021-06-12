@@ -4,6 +4,7 @@ exports.isAuthMiddleware = async (req, res, next) => {
     let token = req.headers["x-access-token"] || req.headers["authorization"];
     if (typeof token === "undefined" || token === null) {
         return res.status(401).json({
+            code: "401",
             message: "Không tìm thấy accessToken",
         });
     }
@@ -15,7 +16,9 @@ exports.isAuthMiddleware = async (req, res, next) => {
         process.env.SINGNATURE
     );
     if (!verifyToken) {
-        return res.status(401).json({ message: "Bạn không có quyền truy cập" });
+        return res
+            .status(401)
+            .json({ code: "401", message: "Bạn không có quyền truy cập" });
     }
     const userName = verifyToken.user.username;
     const role = verifyToken.user.role;

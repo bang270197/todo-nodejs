@@ -1,7 +1,19 @@
 const Task = require("../model/Task");
 const taskService = require("../service/TaskService");
 
-exports.showTask = async (req, res) => {};
+exports.countStatus = async (req, res) => {
+    try {
+        const body = req.body;
+        const id = req.params.id;
+        const count = await Task.countDocuments({
+            project: id,
+            status: body.status,
+        });
+        return res.json({ message: "Count số lượng task", body: count });
+    } catch (err) {
+        return res.status(500).json({ message: "Server error " + err.message });
+    }
+};
 
 //PUT /task/:id
 exports.update = async (req, res) => {

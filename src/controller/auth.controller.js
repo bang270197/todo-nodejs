@@ -4,6 +4,7 @@ const mailer = require("../service/SendEmail");
 const randToken = require("rand-token");
 const { transMailWelCome } = require("../utils/ContacEmail");
 const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
 //POST /api/register
 exports.register = async (req, res) => {
     try {
@@ -72,6 +73,7 @@ exports.login = async (req, res) => {
         const data = {
             username: username,
             role: user.role,
+            password: user.password,
         };
         const accessToken = await authMethod.generateToken(
             data,

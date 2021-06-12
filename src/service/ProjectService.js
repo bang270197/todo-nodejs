@@ -10,13 +10,12 @@ exports.update = async (req) => {
         throw Error(errorMess);
     }
     const body = req.body;
-    body.thumbnail = file.path;
-    const project = await Project.findOneAndUpdate(
-        {
-            _id: req.params.id,
-        },
-        body
-    );
+
+    const project = await Project.findOne({ _id: req.params.id });
+    project.title = body.title;
+    project.detail = body.detail;
+    project.thumbnail = file.path;
+    await project.save();
     return project;
 };
 
