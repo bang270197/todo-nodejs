@@ -3,7 +3,7 @@ const User = require("../model/User");
 exports.isAuthMiddleware = async (req, res, next) => {
     let token = req.headers["x-access-token"] || req.headers["authorization"];
     if (typeof token === "undefined" || token === null) {
-        return res.status(401).json({
+        return res.status(200).json({
             code: "401",
             message: "Không tìm thấy accessToken",
         });
@@ -17,7 +17,7 @@ exports.isAuthMiddleware = async (req, res, next) => {
     );
     if (!verifyToken) {
         return res
-            .status(401)
+            .status(200)
             .json({ code: "401", message: "Bạn không có quyền truy cập" });
     }
     const userName = verifyToken.user.username;

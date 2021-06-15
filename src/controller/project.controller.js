@@ -13,7 +13,7 @@ exports.count = async (req, res) => {
             User.countDocuments({ projects: id }),
             Task.countDocuments({ project: id }),
         ]);
-        return res.json({
+        return res.status(200).json({
             message: "Số lượng task và user",
             countUser: count_user,
             countTask: count_task,
@@ -52,7 +52,9 @@ exports.update = async (req, res) => {
             const id = req.params.id;
             const project = await Project.findOne({ _id: id });
             if (!project || typeof project === "undefined") {
-                return res.json({ message: "Project không tồn tại" });
+                return res
+                    .status(200)
+                    .json({ message: "Project không tồn tại" });
             }
             const projectUpdate = await projectService.update(req);
             res.json({ message: "Update Project thành công!", projectUpdate });
@@ -72,10 +74,12 @@ exports.delete = async (req, res) => {
             const id = req.params.id;
             const project = await Project.findOne({ _id: id });
             if (!project) {
-                return res.json({ message: "Project không tồn tại" });
+                return res
+                    .status(200)
+                    .json({ message: "Project không tồn tại" });
             }
             await Project.deleteOne({ _id: id });
-            res.json({ message: "Xóa project thành công!!" });
+            res.status(200).json({ message: "Xóa project thành công!!" });
         } else {
             res.status(200).json({
                 message: "Bạn không có quyền xóa project",
@@ -91,21 +95,24 @@ exports.create = async (req, res) => {
         if (req.role === "admin") {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                res.status(400).json({ errors: errors.array() });
+                res.status(200).json({ errors: errors.array() });
                 return;
             }
             const project = await projectService.createService(req);
             if (project === null) {
-                res.status(400).json({
+                res.status(200).json({
+                    code: "400",
                     message: "Thêm project không thành công",
                 });
             }
             res.status(200).json({
+                code: "200",
                 message: "Thêm project thành công",
                 project: project,
             });
         } else {
             res.status(200).json({
+                code: "400",
                 message: "Bạn không có quyền thêm project",
             });
         }
@@ -123,17 +130,19 @@ exports.show = async (req, res) => {
         ]);
         if (projects === null || typeof projects === "undefined") {
             res.staus(200).json({
+                code: "200",
                 message: "Danh sách project trống!!",
             });
         }
         res.status(200).json({
+            code: "200",
             message: "Danh sách project",
             countProject: total_record,
             projects: projects,
         });
     } catch (err) {
         // log.error(`Get list project error: ${err.message}`);
-        return res.status(500).json("Server error " + err.message);
+        return res.status(500).json({ code: "200", message: err.message });
     }
 };
 // [POST] api/project/user
@@ -142,9 +151,9 @@ exports.addUser = async (req, res) => {
         if (req.role === "admin") {
             const project = await projectService.addUserToProject(req.body);
             if (!project || typeof project === "undefined") {
-                return res.status(400).json("Project không tồn tại");
+                return res.status(200).json("Project không tồn tại");
             }
-            res.json({
+            res.status(200).json({
                 message: "Thêm user vào project thành công!!",
                 project,
             });

@@ -11,12 +11,13 @@ exports.register = async (req, res) => {
         const { username, password, email } = req.body;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(400).json({ errors: errors.array() });
+            res.status(200).json({ code: "400", errors: errors.array() });
             return;
         }
         const checkUser = await User.findOne({ username: username });
         if (checkUser) {
-            res.status(400).json({
+            res.status(200).json({
+                code: "400",
                 message: "Tên tài khoản đã tồn tại!!",
             });
             1;
@@ -36,17 +37,21 @@ exports.register = async (req, res) => {
                     transMailWelCome.template(user)
                 );
                 res.status(200).json({
+                    code: "200",
                     message: "Đăng ký thành công",
                     body: body,
                 });
             } else {
-                res.status(400).json({
+                res.status(200).json({
+                    code: "400",
                     message: "Đăng ký thất bại",
                 });
             }
         }
     } catch (err) {
-        return res.status(500).send("Server error" + err.message);
+        return res
+            .status(500)
+            .send({ code: "500", message: "Server error" + err.message });
     }
 };
 //POST /api/login
@@ -55,8 +60,9 @@ exports.login = async (req, res) => {
         const { username, password } = req.body;
         const user = await User.findOne({ username: username });
         if (!user) {
-            return res.status(400).json({
-                message: "Tên đang nhập không đúng!!",
+            return res.status(200).json({
+                code: "400",
+                message: "Tên đăng nhập không đúng!!",
             });
         }
         var checkPassword = await authMethod.comparePassword(
@@ -64,7 +70,8 @@ exports.login = async (req, res) => {
             user.password
         );
         if (!checkPassword) {
-            return res.status(400).json({
+            return res.status(200).json({
+                code: "400",
                 message: "Mật khẩu không chính xác!!",
             });
         }
@@ -81,7 +88,8 @@ exports.login = async (req, res) => {
             accessTokenLife
         );
         if (!accessToken) {
-            return res.status(400).json({
+            return res.status(200).json({
+                code: "400",
                 message: "Đăng nhập không thành công!!, vui lòng thử lại",
             });
         }
@@ -99,6 +107,7 @@ exports.login = async (req, res) => {
             refreshToken = user.refreshToken;
         }
         return res.status(200).json({
+            code: "200",
             message: "Đăng nhập thành công!!",
             accessToken,
             refreshToken,
@@ -107,6 +116,7 @@ exports.login = async (req, res) => {
         });
     } catch (e) {
         return res.status(500).json({
+            code: "500",
             message: "Server error" + e.message,
         });
     }
@@ -117,12 +127,12 @@ exports.update = async (req, res) => {
         const { username, newpassword, email } = req.body;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(400).json({ errors: errors.array() });
+            res.status(200).json({ errors: errors.array() });
             return;
         }
         const user = await User.findOne({ username: username });
         if (!user) {
-            return res.status(400).json({
+            return res.status(200).json({
                 message: "User không tồn tại!!",
             });
         }
@@ -131,7 +141,7 @@ exports.update = async (req, res) => {
             { username: username },
             { password: password, email: email }
         );
-        return res.json({ message: "Thay đổi mật thành công" });
+        return res.status(200).json({ message: "Thay đổi mật thành công" });
     } catch (error) {
         return res.status(500).json({
             message: "Server error" + error.message,
