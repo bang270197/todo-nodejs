@@ -4,17 +4,19 @@ const authService = require("../service/AuthToken");
 
 exports.update = async (req) => {
     var file = req.file;
-    let math = ["image/png", "image/jpeg"];
-    if (math.indexOf(file.mimetype) === -1) {
-        let errorMess = `The file <strong>${file.originalname}</strong> is invalid. Only allowed to upload image jpeg or png.`;
-        throw Error(errorMess);
+    const project = await Project.findOne({ _id: req.params.id });
+    if (typeof file !== "undefined") {
+        let math = ["image/png", "image/jpeg"];
+        if (math.indexOf(file.mimetype) === -1) {
+            let errorMess = `The file <strong>${file.originalname}</strong> is invalid. Only allowed to upload image jpeg or png.`;
+            throw Error(errorMess);
+        }
+        project.thumbnail = file.path;
     }
     const body = req.body;
-
-    const project = await Project.findOne({ _id: req.params.id });
     project.title = body.title;
     project.detail = body.detail;
-    project.thumbnail = file.path;
+
     await project.save();
     return project;
 };
@@ -41,15 +43,18 @@ exports.addUserToProject = async (body) => {
 };
 exports.createService = async (req) => {
     var file = req.file;
-    let math = ["image/png", "image/jpeg"];
-    if (math.indexOf(file.mimetype) === -1) {
-        let errorMess = `The file <strong>${file.originalname}</strong> is invalid. Only allowed to upload image jpeg or png.`;
-        throw Error(errorMess);
-    }
     const body = req.body;
+    if (typeof file !== "undefined") {
+        let math = ["image/png", "image/jpeg"];
+        if (math.indexOf(file.mimetype) === -1) {
+            let errorMess = `The file <strong>${file.originalname}</strong> is invalid. Only allowed to upload image jpeg or png.`;
+            throw Error(errorMess);
+        }
+        body.thumbnail = file.path;
+    }
+
     const userName = await decodeUser(req);
     body.createBy = userName;
-    body.thumbnail = file.path;
     body.status = "undone";
     const project = await Project.create(body);
     return project;
