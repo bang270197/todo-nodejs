@@ -21,22 +21,25 @@ exports.update = async (req) => {
     return project;
 };
 
-exports.addUserToProject = async (body) => {
-    const { projectId, userId } = body;
-    const user = await User.findOne({ _id: userId });
-    const project = await Project.findOne({ _id: projectId });
+exports.addUserToProject = async (req) => {
+    const idProject = req.params.idProject;
+    const idUser = req.params.idUser;
+    const user = await User.findOne({ _id: idUser });
+    const project = await Project.findOne({ _id: idProject });
     if (!project || typeof project === "undefined") {
         throw Error("Not found project");
     }
     if (!user || typeof user === "undefined") {
         throw Error("Not found user");
     }
-    if (!project.users.includes(userId)) {
-        project.users.push(userId);
+    if (!project.users.includes(idUser)) {
+        project.users.push(idUser);
         await project.save();
+    } else {
+        throw Error("Đã tồn tại user trong project");
     }
-    if (!user.projects.includes(projectId)) {
-        user.projects.push(projectId);
+    if (!user.projects.includes(idProject)) {
+        user.projects.push(idProject);
         await user.save();
     }
     return project;

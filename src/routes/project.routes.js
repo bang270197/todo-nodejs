@@ -13,7 +13,7 @@ route.post(
 );
 route.get("/project", projectController.show);
 route.delete("/project/:id", projectController.delete);
-route.post("/project/user", projectController.addUser);
+route.post("/project/:idProject/user/:idUser", projectController.addUser);
 route.put(
     "/project/:id",
     configImage.upload.single("thumbnail"),

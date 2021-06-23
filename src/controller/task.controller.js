@@ -1,6 +1,26 @@
 const Task = require("../model/Task");
 const taskService = require("../service/TaskService");
 
+exports.show = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const tasks = await Task.find({ project: { $in: [id] } });
+        if (tasks === null || typeof tasks === "undefined") {
+            return res.status(200).json({
+                code: "400",
+                message: "Lấy danh sách task lỗi",
+            });
+        }
+        return res.status(200).json({
+            code: "200",
+            message: "Danh sách task",
+            body: tasks,
+        });
+    } catch (err) {
+        return res.status(500).json({ message: "Server error " + err.message });
+    }
+};
+
 exports.countStatus = async (req, res) => {
     try {
         const body = req.body;
@@ -98,31 +118,31 @@ exports.addUserToTask = async (req, res) => {
 };
 
 // PUT /api/task/addContent/:id
-exports.addContent = async (req, res) => {
-    try {
-        if (req.role === "admin") {
-            const taskContent = await taskService.addContent(req, res);
-            if (!taskContent || typeof taskContent === "undefined") {
-                res.status(200).status({
-                    code: "400",
-                    message: "Thêm task không thành công",
-                });
-            }
-            res.status(200).json({
-                code: "200",
-                message: "Thêm task thành công",
-                body: taskContent,
-            });
-        } else {
-            res.status(200).json({
-                code: "400",
-                message: "Bạn không có quyền thêm nội dung task task ",
-            });
-        }
-    } catch (err) {
-        return res.status(500).json({ message: "Server error " + err.message });
-    }
-};
+// exports.addContent = async (req, res) => {
+//     try {
+//         if (req.role === "admin") {
+//             const taskContent = await taskService.addContent(req, res);
+//             if (!taskContent || typeof taskContent === "undefined") {
+//                 res.status(200).status({
+//                     code: "400",
+//                     message: "Thêm task không thành công",
+//                 });
+//             }
+//             res.status(200).json({
+//                 code: "200",
+//                 message: "Thêm task thành công",
+//                 body: taskContent,
+//             });
+//         } else {
+//             res.status(200).json({
+//                 code: "400",
+//                 message: "Bạn không có quyền thêm nội dung task task ",
+//             });
+//         }
+//     } catch (err) {
+//         return res.status(500).json({ message: "Server error " + err.message });
+//     }
+// };
 
 // POST /api/task/:id
 exports.create = async (req, res) => {

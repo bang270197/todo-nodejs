@@ -167,27 +167,27 @@ exports.show = async (req, res) => {
 // [POST] api/project/user
 exports.addUser = async (req, res) => {
     try {
-        if (req.role === "admin") {
-            const project = await projectService.addUserToProject(req.body);
-            if (!project || typeof project === "undefined") {
-                return res
-                    .status(200)
-                    .json({ code: "400", message: "Project không tồn tại" });
-            }
-            res.status(200).json({
-                code: "200",
-                message: "Thêm user vào project thành công!!",
-                project,
-            });
-        } else {
-            res.status(200).json({
-                code: "400",
-                message: "Bạn không có quyền thêm user cho project",
-            });
+        // if (req.role === "admin") {
+        const project = await projectService.addUserToProject(req);
+        if (project === null || typeof project === "undefined") {
+            return res
+                .status(200)
+                .json({ code: "400", message: "Project không tồn tại" });
         }
+        return res.status(200).json({
+            code: "200",
+            message: "Thêm user vào project thành công!!",
+            project,
+        });
+        // } else {
+        //     res.status(200).json({
+        //         code: "400",
+        //         message: "Bạn không có quyền thêm user cho project",
+        //     });
+        // }
     } catch (err) {
         // log.error(`Get list project error: ${err.message}`);
-        return res.status(500).json({ message: "Server error " + err.message });
+        return res.status(500).json({ code: "500", message: err.message });
     }
 };
 const decodeUser = async (req) => {
