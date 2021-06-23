@@ -167,26 +167,40 @@ exports.show = async (req, res) => {
 // [POST] api/project/user
 exports.addUser = async (req, res) => {
     try {
-        // if (req.role === "admin") {
-        const project = await projectService.addUserToProject(req);
-        if (project === null || typeof project === "undefined") {
-            return res
-                .status(200)
-                .json({ code: "400", message: "Project không tồn tại" });
+        const idProject = req.params.idProject;
+        const idUser = req.params.idUser;
+        const user = await User.findOne({ _id: idUser });
+        const project = await Project.findOne({ _id: idProject });
+        if (!project || typeof project === "undefined") {
+            throw Error("Not found project");
+        }
+        if (!user || typeof user === "undefined") {
+            throw Error("Not found user");
+        }
+        if (!project.users.includes(idUser)) {
+            project.users.push(idUser);
+            await project.save();
+        } else {
+            return res.status(200).json({
+                code: "400",
+                message: "Đã tồn tại user trong project này!!",
+            });
+        }
+        if (!user.projects.includes(idProject)) {
+            user.projects.push(idProject);
+            await user.save();
+        } else {
+            return res.status(200).json({
+                code: "400",
+                message: "Đã tồn tại user trong project này!!",
+            });
         }
         return res.status(200).json({
             code: "200",
             message: "Thêm user vào project thành công!!",
             project,
         });
-        // } else {
-        //     res.status(200).json({
-        //         code: "400",
-        //         message: "Bạn không có quyền thêm user cho project",
-        //     });
-        // }
     } catch (err) {
-        // log.error(`Get list project error: ${err.message}`);
         return res.status(500).json({ code: "500", message: err.message });
     }
 };

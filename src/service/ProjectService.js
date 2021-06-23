@@ -21,7 +21,7 @@ exports.update = async (req) => {
     return project;
 };
 
-exports.addUserToProject = async (req) => {
+exports.addUserToProject = async (req, res) => {
     const idProject = req.params.idProject;
     const idUser = req.params.idUser;
     const user = await User.findOne({ _id: idUser });
@@ -36,7 +36,10 @@ exports.addUserToProject = async (req) => {
         project.users.push(idUser);
         await project.save();
     } else {
-        throw Error("Đã tồn tại user trong project");
+        return res.status(200).json({
+            code: "400",
+            message: "Đã tồn tại user trong project này!!",
+        });
     }
     if (!user.projects.includes(idProject)) {
         user.projects.push(idProject);
