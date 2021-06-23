@@ -5,7 +5,7 @@ exports.show = async (req, res) => {
     try {
         const id = req.params.id;
         const tasks = await Task.find({ project: { $in: [id] } });
-        if (tasks === null || typeof tasks === "undefined") {
+        if (tasks === 0 || typeof tasks === "undefined") {
             return res.status(200).json({
                 code: "400",
                 message: "Lấy danh sách task lỗi",
@@ -91,25 +91,25 @@ exports.updateStatus = async (req, res) => {
 //POST /task/user
 exports.addUserToTask = async (req, res) => {
     try {
-        if (req.role === "admin") {
-            const task = await taskService.addUserToTask(req);
-            if (!task || typeof task === "undefined") {
-                return res.status(401).status({
-                    code: "400",
-                    message: "Thêm user cho task không thành công",
-                });
-            }
-            return res.json({
-                code: "200",
-                message: "Thêm user cho task thành công",
-                body: task,
-            });
-        } else {
-            res.status(200).json({
+        // if (req.role === "admin") {
+        const task = await taskService.addUserToTask(req);
+        if (task === 0 || typeof task === "undefined") {
+            return res.status(401).status({
                 code: "400",
-                message: "Bạn không có quyền thêm user cho task",
+                message: "Thêm user cho task không thành công",
             });
         }
+        return res.json({
+            code: "200",
+            message: "Thêm user cho task thành công",
+            body: task,
+        });
+        // } else {
+        //     res.status(200).json({
+        //         code: "400",
+        //         message: "Bạn không có quyền thêm user cho task",
+        //     });
+        // }
     } catch (err) {
         return res
             .status(500)
@@ -147,19 +147,19 @@ exports.addUserToTask = async (req, res) => {
 // POST /api/task/:id
 exports.create = async (req, res) => {
     try {
-        if (req.role === "admin") {
-            const task = await taskService.create(req);
-            return res.status(200).json({
-                code: "200",
-                message: "Thêm task thành công",
-                body: task,
-            });
-        } else {
-            res.status(200).json({
-                code: "400",
-                message: "Bạn không có quyền thêm task ",
-            });
-        }
+        // if (req.role === "admin") {
+        const task = await taskService.create(req);
+        return res.status(200).json({
+            code: "200",
+            message: "Thêm task thành công",
+            body: task,
+        });
+        // } else {
+        //     res.status(200).json({
+        //         code: "400",
+        //         message: "Bạn không có quyền thêm task ",
+        //     });
+        // }
     } catch (err) {
         return res.status(500).json({ message: "Server error " + err.message });
     }
@@ -170,7 +170,7 @@ exports.delete = async (req, res) => {
         if (req.role === "admin") {
             const id = req.params.id;
             const task = await Task.findOne({ _id: id });
-            if (!task || typeof task === "undefined") {
+            if (task === 0 || typeof task === "undefined") {
                 return res.status(200).json({
                     code: "400",
                     message: "Task không tồn tại!!",

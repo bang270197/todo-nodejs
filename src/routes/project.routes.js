@@ -21,4 +21,5 @@ route.put(
 );
 route.put("/project/status/:id", projectController.updateStatus);
 route.get("/project/count/:id", projectController.count);
+route.get("/project/user/:id", projectController.getUserByProject);
 module.exports = route;

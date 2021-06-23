@@ -26,6 +26,9 @@ exports.addUserToProject = async (req, res) => {
     const idUser = req.params.idUser;
     const user = await User.findOne({ _id: idUser });
     const project = await Project.findOne({ _id: idProject });
+    const data = {
+        body,
+    };
     if (!project || typeof project === "undefined") {
         throw Error("Not found project");
     }
