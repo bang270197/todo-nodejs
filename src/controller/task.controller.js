@@ -5,7 +5,7 @@ exports.show = async (req, res) => {
     try {
         const id = req.params.id;
         const tasks = await Task.find({ project: { $in: [id] } });
-        if (tasks === 0 || typeof tasks === "undefined") {
+        if (tasks.length === 0 || typeof tasks === "undefined") {
             return res.status(200).json({
                 code: "400",
                 message: "Lấy danh sách task lỗi",
@@ -93,7 +93,7 @@ exports.addUserToTask = async (req, res) => {
     try {
         // if (req.role === "admin") {
         const task = await taskService.addUserToTask(req);
-        if (task === 0 || typeof task === "undefined") {
+        if (task.length === 0 || typeof task === "undefined") {
             return res.status(401).status({
                 code: "400",
                 message: "Thêm user cho task không thành công",
@@ -170,7 +170,7 @@ exports.delete = async (req, res) => {
         if (req.role === "admin") {
             const id = req.params.id;
             const task = await Task.findOne({ _id: id });
-            if (task === 0 || typeof task === "undefined") {
+            if (task.length === 0 || typeof task === "undefined") {
                 return res.status(200).json({
                     code: "400",
                     message: "Task không tồn tại!!",

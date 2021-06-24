@@ -19,7 +19,7 @@ exports.show = async (req, res) => {
                 },
             },
         ]);
-        if (users === null || typeof users === "undefined") {
+        if (users.length === 0 || typeof users === "undefined") {
             return res.status(200).json({
                 code: "400",
                 message: "Lấy danh sách user lỗi",

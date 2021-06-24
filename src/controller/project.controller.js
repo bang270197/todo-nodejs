@@ -100,7 +100,7 @@ exports.delete = async (req, res) => {
         // if (req.role === "admin") {
         const id = req.params.id;
         const project = await Project.findOne({ _id: id });
-        if (project === 0 || typeof project === "undefined") {
+        if (project.length === 0 || typeof project === "undefined") {
             return res
                 .status(200)
                 .json({ code: "400", message: "Project không tồn tại" });
@@ -132,7 +132,7 @@ exports.create = async (req, res) => {
             return;
         }
         const project = await projectService.createService(req);
-        if (project === 0 || typeof project === "undefined") {
+        if (project.length === 0 || typeof project === "undefined") {
             res.status(200).json({
                 code: "400",
                 message: "Thêm project không thành công",
@@ -163,7 +163,7 @@ exports.show = async (req, res) => {
             Project.countDocuments({}),
             projectService.showAll(req),
         ]);
-        if (projects === 0 || typeof projects === "undefined") {
+        if (projects.length === 0 || typeof projects === "undefined") {
             res.staus(200).json({
                 code: "400",
                 message: "Danh sách project trống!!",
@@ -187,7 +187,7 @@ exports.addUser = async (req, res) => {
         const idUser = req.params.idUser;
         const user = await User.findOne({ _id: idUser });
         const project = await Project.findOne({ _id: idProject });
-        if (project === 0 || typeof project === "undefined") {
+        if (project.length === 0 || typeof project === "undefined") {
             throw Error("Not found project");
         }
         if (user === 0 || typeof user === "undefined") {

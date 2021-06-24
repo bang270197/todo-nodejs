@@ -29,10 +29,10 @@ exports.addUserToProject = async (req, res) => {
     const data = {
         body,
     };
-    if (!project || typeof project === "undefined") {
+    if (project.length === 0 || typeof project === "undefined") {
         throw Error("Not found project");
     }
-    if (!user || typeof user === "undefined") {
+    if (user.length === 0 || typeof user === "undefined") {
         throw Error("Not found user");
     }
     if (!project.users.includes(idUser)) {

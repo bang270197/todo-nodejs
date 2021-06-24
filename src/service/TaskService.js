@@ -6,7 +6,7 @@ exports.update = async (req, res) => {
     const id = req.params.id;
     const idUser = req.user._id;
     const task = await Task.findOne({ user: idUser, _id: id });
-    if (task === null || typeof task === "undefined") {
+    if (task.length === 0 || typeof task === "undefined") {
         throw new Error("Bạn không có quyền thay đổi task");
     }
     task.title = body.title;
@@ -20,9 +20,9 @@ exports.addUserToTask = async (req) => {
     const taskid = req.params.idTask;
     const task = await Task.findOne({ _id: taskid });
     const user = await User.findOne({ _id: userId });
-    if (!task || typeof task === "undefined")
+    if (task.length || typeof task === "undefined")
         throw new Error("Task không tồn tại");
-    if (!user || typeof user === "undefined")
+    if (user.length || typeof user === "undefined")
         throw new Error("User không tồn tại");
     task.user = userId;
     await task.save();
@@ -41,7 +41,7 @@ exports.create = async (req) => {
     };
     const id = req.params.id;
     const project = await Project.findOne({ _id: id });
-    if (!project || typeof project === "undefined") {
+    if (project.length === 0 || typeof project === "undefined") {
         throw new Error("Not found project");
     }
     body.project = id;
