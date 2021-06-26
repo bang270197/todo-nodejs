@@ -1,21 +1,36 @@
 const Task = require("../model/Task");
 const taskService = require("../service/TaskService");
-
+const Project = require("../model/Project");
 exports.show = async (req, res) => {
     try {
         const id = req.params.id;
-        const tasks = await Task.find({ project: { $in: [id] } });
-        if (tasks.length === 0 || typeof tasks === "undefined") {
-            return res.status(200).json({
-                code: "400",
-                message: "Lấy danh sách task lỗi",
+        const tasks = await Task.find({ project: id });
+        const task = Task.find({ project: id })
+            .populate({ path: "user", select: "username" })
+            .then((task) => {
+                res.json({
+                    code: "200",
+                    message: "Danh sách task",
+                    body: task,
+                });
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    code: "500",
+                    message: "Server error " + err.message,
+                });
             });
-        }
-        return res.status(200).json({
-            code: "200",
-            message: "Danh sách task",
-            body: tasks,
-        });
+        // if (tasks.length === 0 || typeof tasks === "undefined") {
+        //     return res.status(200).json({
+        //         code: "400",
+        //         message: "Projetc chưa có task nào!!",
+        //     });
+        // }
+        // return res.status(200).json({
+        //     code: "200",
+        //     message: "Danh sách task",
+        //     body: tasks,
+        // });
     } catch (err) {
         return res.status(500).json({ message: "Server error " + err.message });
     }
@@ -170,6 +185,7 @@ exports.delete = async (req, res) => {
         if (req.role === "admin") {
             const id = req.params.id;
             const task = await Task.findOne({ _id: id });
+            const project = await Project.findOne({ tasks: id });
             if (task.length === 0 || typeof task === "undefined") {
                 return res.status(200).json({
                     code: "400",
@@ -177,9 +193,11 @@ exports.delete = async (req, res) => {
                 });
             }
             await Task.deleteOne({ _id: id });
-            return res
-                .status(200)
-                .json({ code: "200", message: "Xóa task thành công!!" });
+            return res.status(200).json({
+                code: "200",
+                message: "Xóa task thành công!!",
+                body: task,
+            });
         } else {
             return res.status(200).json({
                 code: "400",

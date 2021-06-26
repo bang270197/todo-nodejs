@@ -23,6 +23,7 @@ exports.show = async (req, res) => {
             return res.status(200).json({
                 code: "400",
                 message: "Lấy danh sách user lỗi",
+                body: users,
             });
         }
         return res.status(200).json({

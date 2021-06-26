@@ -100,6 +100,7 @@ exports.delete = async (req, res) => {
         // if (req.role === "admin") {
         const id = req.params.id;
         const project = await Project.findOne({ _id: id });
+        await Task.deleteMany({ project: id });
         if (project.length === 0 || typeof project === "undefined") {
             return res
                 .status(200)
@@ -109,6 +110,7 @@ exports.delete = async (req, res) => {
         res.status(200).json({
             code: "200",
             message: "Xóa project thành công!!",
+            body: project,
         });
         // } else {
         //     res.status(200).json({
@@ -164,12 +166,13 @@ exports.show = async (req, res) => {
             projectService.showAll(req),
         ]);
         if (projects.length === 0 || typeof projects === "undefined") {
-            res.staus(200).json({
+            return res.status(200).json({
                 code: "400",
                 message: "Danh sách project trống!!",
+                projects: projects,
             });
         }
-        res.status(200).json({
+        return res.status(200).json({
             code: "200",
             message: "Danh sách project",
             countProject: total_record,

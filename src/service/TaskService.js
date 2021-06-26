@@ -1,6 +1,8 @@
 const Task = require("../model/Task");
 const Project = require("../model/Project");
 const User = require("../model/User");
+const mailer = require("../service/SendEmail");
+const { contentTaskToUser } = require("../utils/ContacEmail");
 exports.update = async (req, res) => {
     const body = req.body;
     const id = req.params.id;
@@ -18,8 +20,15 @@ exports.update = async (req, res) => {
 exports.addUserToTask = async (req) => {
     const userId = req.params.idUser;
     const taskid = req.params.idTask;
-    const task = await Task.findOne({ _id: taskid });
     const user = await User.findOne({ _id: userId });
+
+    const task = await Task.findOne({ _id: taskid });
+    //gửi email
+    await mailer.sendEmailNormal(
+        user.email,
+        contentTaskToUser.subject,
+        contentTaskToUser.template(task.title, task.priority)
+    );
     if (task.length || typeof task === "undefined")
         throw new Error("Task không tồn tại");
     if (user.length || typeof user === "undefined")

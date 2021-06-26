@@ -6,6 +6,34 @@ const transMailWelCome = {
 `;
     },
 };
+const contentTaskToUser = {
+    subject: "THÔNG BÁO GÁN TASK!!",
+    template: (content, priority) => {
+        //<p style="color: red;"></p>
+        //item.priority ===
+        // "high"
+        // ? "fas fa-long-arrow-alt-up high"
+        // : item.priority ===
+        //   "medium"
+        // ? "fas fa-long-arrow-alt-up medium"
+        // : item.priority ===
+        //   "low"
+        // ? "fas fa-long-arrow-alt-up low"
+        // : ""
+        const status =
+            priority === "high"
+                ? `<p style="color: red;">${priority}</p>`
+                : priority === "medium"
+                ? `<p style="color: orange;">${priority}</p>`
+                : priority === "low"
+                ? `<p style="color: yellow;">${priority}</p>`
+                : ``;
+        return `<h3>Bạn đã được gán task với nội dung ${content}.</h3>
+        <h3>Mức độ ưu tiên của task này là : ${status}</h3>
+`;
+    },
+};
 module.exports = {
     transMailWelCome: transMailWelCome,
+    contentTaskToUser: contentTaskToUser,
 };
