@@ -9,17 +9,6 @@ const transMailWelCome = {
 const contentTaskToUser = {
     subject: "THÔNG BÁO GÁN TASK!!",
     template: (content, priority) => {
-        //<p style="color: red;"></p>
-        //item.priority ===
-        // "high"
-        // ? "fas fa-long-arrow-alt-up high"
-        // : item.priority ===
-        //   "medium"
-        // ? "fas fa-long-arrow-alt-up medium"
-        // : item.priority ===
-        //   "low"
-        // ? "fas fa-long-arrow-alt-up low"
-        // : ""
         const status =
             priority === "high"
                 ? `<p style="color: red;">${priority}</p>`

@@ -161,15 +161,22 @@ exports.show = async (req, res) => {
     try {
         const userName = await decodeUser(req);
         // console.log(userName);
+        const { limit, page } = req.query;
         let [total_record, projects] = await Promise.all([
             Project.countDocuments({}),
             projectService.showAll(req),
         ]);
+        const pagination = {
+            page: Number(page),
+            limit: Number(limit),
+            totalRows: Number(total_record),
+        };
         if (projects.length === 0 || typeof projects === "undefined") {
             return res.status(200).json({
                 code: "400",
                 message: "Danh sách project trống!!",
                 projects: projects,
+                pagination: pagination,
             });
         }
         return res.status(200).json({
@@ -177,6 +184,7 @@ exports.show = async (req, res) => {
             message: "Danh sách project",
             countProject: total_record,
             projects: projects,
+            pagination: pagination,
         });
     } catch (err) {
         // log.error(`Get list project error: ${err.message}`);
