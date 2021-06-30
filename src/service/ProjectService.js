@@ -88,9 +88,9 @@ exports.showAll = async (req) => {
                 as: "listUser",
             },
         },
-        {
-            $match: { createBy: userName },
-        },
+        // {
+        //     $match: { createBy: userName },
+        // },
         {
             $sort: { createdAt: -1 },
         },

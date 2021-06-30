@@ -109,7 +109,7 @@ exports.login = async (req, res) => {
         return res.status(200).json({
             code: "200",
             message: "Đăng nhập thành công!!",
-            accessToken,
+            accessToken: accessToken,
             refreshToken,
             username: user.username,
             role: user.role,
