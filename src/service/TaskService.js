@@ -47,6 +47,7 @@ exports.create = async (req) => {
         detail: req.body.detail,
         priority: req.body.priority,
         status: req.body.status,
+        deadline: req.body.deadline,
     };
     const id = req.params.id;
     const project = await Project.findOne({ _id: id });

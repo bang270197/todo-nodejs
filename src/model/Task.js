@@ -4,6 +4,7 @@ const task = new Schema(
     {
         title: { type: String, defauld: "" },
         detail: { type: String, defauld: "" },
+        deadline: { type: String, defauld: "" },
         priority: {
             type: String,
             enum: ["high", "medium", "low"],
