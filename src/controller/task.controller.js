@@ -57,10 +57,21 @@ exports.countStatus = async (req, res) => {
 //PUT /task/:id
 exports.update = async (req, res) => {
     try {
-        const task = await taskService.update(req, res);
-        return res
-            .status(200)
-            .json({ code: "200", message: "Sửa task thành công", body: task });
+        const id = req.params.id;
+        const idUser = req.user._id;
+        const task = await Task.findOne({ user: idUser, _id: id });
+        if (task === null || typeof task === "undefined") {
+            return res.status(200).json({
+                code: "400",
+                message: "Bạn không có quyền thay đổi task",
+            });
+        }
+        const newTask = await taskService.update(req, res);
+        return res.status(200).json({
+            code: "200",
+            message: "Sửa task thành công",
+            body: newTask,
+        });
     } catch (err) {
         return res
             .status(500)

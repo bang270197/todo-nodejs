@@ -8,11 +8,8 @@ exports.update = async (req, res) => {
     const id = req.params.id;
     const idUser = req.user._id;
     const task = await Task.findOne({ user: idUser, _id: id });
-    if (task.length === 0 || typeof task === "undefined") {
-        throw new Error("Bạn không có quyền thay đổi task");
-    }
     task.title = body.title;
-    task.detail = body.detail;
+    // task.detail = body.detail;
     await task.save();
     return task;
     // console.log(task.user + "---");

@@ -47,22 +47,22 @@ exports.count = async (req, res) => {
 //[PUT] api/project/status/:id
 exports.updateStatus = async (req, res) => {
     try {
-        if (req.role === "admin") {
-            const id = req.params.id;
-            const project = await Project.findOne({ _id: id });
-            project.status = project.status === "done" ? "undone" : "done";
-            await project.save();
-            res.status(200).json({
-                code: "200",
-                message: "Update status thành công!",
-                body: project,
-            });
-        } else {
-            res.status(200).json({
-                code: "400",
-                message: "Bạn không có quyền update status project",
-            });
-        }
+        // if (req.role === "admin") {
+        const id = req.params.id;
+        const project = await Project.findOne({ _id: id });
+        project.status = project.status === "done" ? "undone" : "done";
+        await project.save();
+        res.status(200).json({
+            code: "200",
+            message: "Update status thành công!",
+            body: project,
+        });
+        // } else {
+        //     res.status(200).json({
+        //         code: "400",
+        //         message: "Bạn không có quyền update status project",
+        //     });
+        // }
     } catch (err) {
         return res
             .status(500)

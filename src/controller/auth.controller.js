@@ -78,6 +78,7 @@ exports.login = async (req, res) => {
         const accessTokenLife = process.env.TOKENLIFE;
         const accessTokenSecret = process.env.SINGNATURE;
         const data = {
+            id: user._id,
             username: username,
             role: user.role,
             password: user.password,

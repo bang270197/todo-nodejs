@@ -62,14 +62,15 @@ exports.createService = async (req) => {
         body.thumbnail = file.path;
     }
 
-    const userName = await decodeUser(req);
-    body.createBy = userName;
+    const { username } = await decodeUser(req);
+    body.createBy = username;
     body.status = "undone";
     const project = await Project.create(body);
     return project;
 };
 exports.showAll = async (req) => {
-    const userName = await decodeUser(req);
+    const { id } = await decodeUser(req);
+    // const users = await User.find({ _id: userNameId });
     const { limit, page } = req.query;
     const projects = await Project.aggregate([
         {
@@ -89,7 +90,10 @@ exports.showAll = async (req) => {
             },
         },
         // {
-        //     $match: { createBy: userName },
+        //     $unwind: "$listUser",
+        // },
+        // {
+        //     $match: { "listUser._id": { $in: ["60dab7e66fc0555004635cce"] } },
         // },
         {
             $sort: { createdAt: -1 },
@@ -132,6 +136,6 @@ const decodeUser = async (req) => {
     if (verifyToken === null || typeof verifyToken === "undefined") {
         return res.status(401).json({ message: "Bạn không có quyền truy cập" });
     }
-    const userName = verifyToken.user.username;
-    return userName;
+    // const { id, usename } = verifyToken.user.id;
+    return verifyToken.user;
 };
