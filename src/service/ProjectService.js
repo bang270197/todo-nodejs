@@ -70,6 +70,7 @@ exports.createService = async (req) => {
 };
 exports.showAll = async (req) => {
     const { id } = await decodeUser(req);
+
     // const users = await User.find({ _id: userNameId });
     const { limit, page } = req.query;
     const projects = await Project.aggregate([

@@ -22,8 +22,10 @@ exports.isAuthMiddleware = async (req, res, next) => {
     }
     const userName = verifyToken.user.username;
     const role = verifyToken.user.role;
+    const id = verifyToken.user.id;
     const user = await User.findOne({ username: userName });
     req.user = user;
     req.role = role;
+    req.id = id;
     return next();
 };
