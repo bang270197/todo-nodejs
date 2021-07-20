@@ -1,7 +1,7 @@
 const Project = require("../model/Project");
 const User = require("../model/User");
 const authService = require("../service/AuthToken");
-
+const mongoose = require("mongoose");
 exports.update = async (req) => {
     var file = req.file;
     const project = await Project.findOne({ _id: req.params.id });
@@ -52,6 +52,7 @@ exports.addUserToProject = async (req, res) => {
 };
 exports.createService = async (req) => {
     var file = req.file;
+    const id = req.id;
     const body = req.body;
     if (typeof file !== "undefined") {
         let math = ["image/png", "image/jpeg"];
@@ -66,11 +67,13 @@ exports.createService = async (req) => {
     body.createBy = username;
     body.status = "undone";
     const project = await Project.create(body);
+    project.users.push(id);
+    await project.save();
     return project;
 };
 exports.showAll = async (req) => {
-    const { id } = await decodeUser(req);
-
+    // const { id } = await decodeUser(req);
+    const id = req.id;
     // const users = await User.find({ _id: userNameId });
     const { limit, page } = req.query;
     const projects = await Project.aggregate([
@@ -90,12 +93,13 @@ exports.showAll = async (req) => {
                 as: "listUser",
             },
         },
-        // {
-        //     $unwind: "$listUser",
-        // },
-        // {
-        //     $match: { "listUser._id": { $in: ["60dab7e66fc0555004635cce"] } },
-        // },
+        {
+            $match: {
+                users: {
+                    $in: [mongoose.Types.ObjectId(id)],
+                },
+            },
+        },
         {
             $sort: { createdAt: -1 },
         },

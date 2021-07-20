@@ -126,23 +126,26 @@ exports.login = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { username, newpassword, email } = req.body;
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            res.status(200).json({ errors: errors.array() });
-            return;
-        }
+        // const errors = validationResult(req);
+        // if (!errors.isEmpty()) {
+        //     res.status(200).json({ errors: errors.array() });
+        //     return;
+        // }
         const user = await User.findOne({ username: username });
-        if (!user) {
+        if (user.length === 0 || typeof user === "undefined") {
             return res.status(200).json({
+                code: "400",
                 message: "User không tồn tại!!",
             });
         }
         const password = await authMethod.hashPassword(newpassword);
-        const update = await User.updateOne(
-            { username: username },
-            { password: password, email: email }
-        );
-        return res.status(200).json({ message: "Thay đổi mật thành công" });
+        const update = await User.updateOne({
+            password: password,
+            email: email,
+        });
+        return res
+            .status(200)
+            .json({ code: "200", message: "Thay đổi mật thành công" });
     } catch (error) {
         return res.status(500).json({
             message: "Server error" + error.message,
