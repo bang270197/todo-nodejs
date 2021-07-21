@@ -51,17 +51,17 @@ exports.addUserToProject = async (req, res) => {
     return project;
 };
 exports.createService = async (req) => {
-    var file = req.file;
+    // var file = req.file;
     const id = req.id;
     const body = req.body;
-    if (typeof file !== "undefined") {
-        let math = ["image/png", "image/jpeg"];
-        if (math.indexOf(file.mimetype) === -1) {
-            let errorMess = `The file <strong>${file.originalname}</strong> is invalid. Only allowed to upload image jpeg or png.`;
-            throw Error(errorMess);
-        }
-        body.thumbnail = file.path;
-    }
+    // if (typeof file !== "undefined") {
+    //     let math = ["image/png", "image/jpeg"];
+    //     if (math.indexOf(file.mimetype) === -1) {
+    //         let errorMess = `The file <strong>${file.originalname}</strong> is invalid. Only allowed to upload image jpeg or png.`;
+    //         throw Error(errorMess);
+    //     }
+    //     body.thumbnail = file.path;
+    // }
 
     const { username } = await decodeUser(req);
     body.createBy = username;

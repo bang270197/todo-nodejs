@@ -13,7 +13,7 @@ app.use(
     "/static",
     express.static(path.resolve(__dirname, "../public/uploads"))
 );
-db.connect();
+db.connectDB().catch(console.log);
 session.configSession(app);
 app.get("/", (req, res) => {
     res.send("Hello World!");
