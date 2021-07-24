@@ -26,16 +26,3 @@ services:
         tty: true
         ports:
             - 5002:5000
-    nginx:
-        image: nginx:stable
-        volumes:
-            - /mnt/data/ceph/letsencrypt/data/:/data/letsencrypt/
-            - /mnt/data/ceph/letsencrypt/etc/:/etc/letsencrypt/
-            - /mnt/data/ceph/nginx/etc/:/etc/nginx/
-            - /mnt/data/www/:/www
-        networks:
-            - backend
-        logging:
-            driver: json-file
-        deploy:
-            mode: global
