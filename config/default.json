@@ -1,0 +1,47 @@
+{
+	"server": {
+		"host": "0.0.0.0",
+		"port": 5000
+	},
+	"app": {
+		"secret_key": "aeedf5f652c2a1a11a9f5026df269515"
+	},
+	"token_expire": 31536000,
+	"mailler": {
+		"gmail": {
+			"email_address": "support@hanaspeak.com",
+			"password": "zlkrqttwymjpsspb"
+		},
+		"yandex": {
+			"email_address": "getbee@getbee.vn",
+			"password": "Vietinterview1"
+		},
+		"vietinterview": {
+			"email_address": "getbee@vietinterview.com",
+			"password": "987654321"
+		},
+		"aws_ses": {
+			"auth": {
+				"username": "AKIAT2CMXR4QRQIMTTUM",
+				"password": "BH/Zj3778sspViPD0Ke2aJ+g9nOGPlxL00TNmy7JtUir"
+			},
+			"email_address": "getbee@vietinterview.com"
+		},
+		"default": {
+			"auth": {
+				"username": "AKIAT2CMXR4QRQIMTTUM",
+				"password": "BH/Zj3778sspViPD0Ke2aJ+g9nOGPlxL00TNmy7JtUir"
+			},
+			"email_address": "Getbee Robot<noreply@getbee.vn>"
+		}
+	},
+	"salt_factor": 10,
+	"mongodb": {
+		"database": "test",
+		"host": "web.testgetbee.getbee.vn",
+		"port": 27017,
+		"username": "new_user",
+		"password": "123456"
+	},
+	"domain": "https://getbee.vn"
+}

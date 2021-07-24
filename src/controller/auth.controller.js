@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 exports.register = async (req, res) => {
     try {
         const { username, password, email } = req.body;
+        console.log('hungnv')
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.status(200).json({ code: "400", errors: errors.array() });
@@ -57,6 +58,7 @@ exports.register = async (req, res) => {
 //POST /api/login
 exports.login = async (req, res) => {
     try {
+        console.log('login')
         const { username, password } = req.body;
         const user = await User.findOne({ username: username });
         if (!user) {

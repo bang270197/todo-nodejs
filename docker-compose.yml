@@ -1,0 +1,27 @@
+version: "3"
+
+networks:
+    backend:
+services:
+    mongodb:
+        image: mongo
+        networks:
+            - backend
+        ports:
+            - 27017:27017
+        environment:
+            TERM: xterm
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /todo_db:/data/db
+    app_prod:
+        image: hungnv0902/node-todo:prod
+        networks:
+            - backend
+        links:
+            - mongodb
+        environment:
+            TERM: xterm
+        tty: true
+        ports:
+            - 5002:5000

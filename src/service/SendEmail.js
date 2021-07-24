@@ -1,9 +1,10 @@
 const nodeMailer = require("nodemailer");
 require("dotenv").config();
-const userName = process.env.MAIL_USERNAME;
-const port = process.env.MAIL_PORT;
-const host = process.env.MAIL_HOST;
-const pass = process.env.MAIL_PASSWORD;
+var config = require("config");
+const userName = config.get("mailler.default.auth.username");
+const port = '25';
+const host = "email-smtp.us-east-1.amazonaws.com";
+const pass = config.get("mailler.default.auth.username");
 const transporter = nodeMailer.createTransport({
     host: host,
     port: port,
