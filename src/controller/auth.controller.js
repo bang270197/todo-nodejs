@@ -9,7 +9,6 @@ const jwt = require("jsonwebtoken");
 exports.register = async (req, res) => {
     try {
         const { username, password, email } = req.body;
-        console.log('hungnv')
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.status(200).json({ code: "400", errors: errors.array() });
