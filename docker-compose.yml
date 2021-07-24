@@ -34,11 +34,8 @@ services:
             - /mnt/data/ceph/nginx/etc/:/etc/nginx/
             - /mnt/data/www/:/www
         networks:
-            - host
+            - backend
         logging:
             driver: json-file
         deploy:
             mode: global
-        networks:
-            host:
-                external: true
