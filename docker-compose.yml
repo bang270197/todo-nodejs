@@ -5,7 +5,7 @@ networks:
 services:
     mongodb:
         image: mongo
-        command: mongod --dbpath /data/db --port 27017 --auth
+        command: mongod --dbpath /data/db --port 27017
         networks:
             - backend
         ports:
