@@ -31,11 +31,11 @@ exports.register = async (req, res) => {
             };
             const user = await User.create(body);
             if (user) {
-                await mailer.sendEmailNormal(
-                    user.email,
-                    transMailWelCome.subject,
-                    transMailWelCome.template(user)
-                );
+                // await mailer.sendEmailNormal(
+                //     user.email,
+                //     transMailWelCome.subject,
+                //     transMailWelCome.template(user)
+                // );
                 res.status(200).json({
                     code: "200",
                     message: "Đăng ký thành công",
