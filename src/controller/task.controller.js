@@ -105,24 +105,24 @@ exports.updateStatus = async (req, res) => {
         if (typeof task.user != "undefined") {
             userId = JSON.parse(JSON.stringify(task.user));
         }
-        if (
-            userId != null &&
-            typeof userId != "undefined" &&
-            req.id === userId
-        ) {
-            task.status = req.body.status;
-            await task.save();
-            return res.status(200).json({
-                code: "200",
-                message: "Update status thành công",
-                body: task,
-            });
-        } else {
-            res.status(200).json({
-                code: "400",
-                message: "Bạn không có quyền di chuyển task này",
-            });
-        }
+        // if (
+        //     userId != null &&
+        //     typeof userId != "undefined" &&
+        //     req.id === userId
+        // ) {
+        task.status = req.body.status;
+        await task.save();
+        return res.status(200).json({
+            code: "200",
+            message: "Update status thành công",
+            body: task,
+        });
+        // } else {
+        //     res.status(200).json({
+        //         code: "400",
+        //         message: "Bạn không có quyền di chuyển task này",
+        //     });
+        // }
 
         // }
     } catch (err) {
