@@ -135,25 +135,25 @@ exports.updateStatus = async (req, res) => {
 //POST /task/user
 exports.addUserToTask = async (req, res) => {
     try {
-        if (req.role === "admin") {
-            const task = await taskService.addUserToTask(req);
-            if (task.length === 0 || typeof task === "undefined") {
-                return res.status(401).status({
-                    code: "400",
-                    message: "Thêm user cho task không thành công",
-                });
-            }
-            return res.json({
-                code: "200",
-                message: "Thêm user cho task thành công",
-                body: task,
-            });
-        } else {
-            res.status(200).json({
+        // if (req.role === "admin") {
+        const task = await taskService.addUserToTask(req);
+        if (task.length === 0 || typeof task === "undefined") {
+            return res.status(401).status({
                 code: "400",
-                message: "Bạn không có quyền thêm user cho task",
+                message: "Thêm user cho task không thành công",
             });
         }
+        return res.json({
+            code: "200",
+            message: "Thêm user cho task thành công",
+            body: task,
+        });
+        // } else {
+        //     res.status(200).json({
+        //         code: "400",
+        //         message: "Bạn không có quyền thêm user cho task",
+        //     });
+        // }
     } catch (err) {
         return res
             .status(500)
@@ -191,19 +191,19 @@ exports.addUserToTask = async (req, res) => {
 // POST /api/task/:id
 exports.create = async (req, res) => {
     try {
-        if (req.role === "admin") {
-            const task = await taskService.create(req);
-            return res.status(200).json({
-                code: "200",
-                message: "Thêm task thành công",
-                body: task,
-            });
-        } else {
-            res.status(200).json({
-                code: "400",
-                message: "Bạn không có quyền thêm task ",
-            });
-        }
+        // if (req.role === "admin") {
+        const task = await taskService.create(req);
+        return res.status(200).json({
+            code: "200",
+            message: "Thêm task thành công",
+            body: task,
+        });
+        // } else {
+        //     res.status(200).json({
+        //         code: "400",
+        //         message: "Bạn không có quyền thêm task ",
+        //     });
+        // }
     } catch (err) {
         return res.status(500).json({ message: "Server error " + err.message });
     }
@@ -211,28 +211,28 @@ exports.create = async (req, res) => {
 // [DELETE] /api/task/:id
 exports.delete = async (req, res) => {
     try {
-        if (req.role === "admin") {
-            const id = req.params.id;
-            const task = await Task.findOne({ _id: id });
-            const project = await Project.findOne({ tasks: id });
-            if (task.length === 0 || typeof task === "undefined") {
-                return res.status(200).json({
-                    code: "400",
-                    message: "Task không tồn tại!!",
-                });
-            }
-            await Task.deleteOne({ _id: id });
-            return res.status(200).json({
-                code: "200",
-                message: "Xóa task thành công!!",
-                body: task,
-            });
-        } else {
+        // if (req.role === "admin") {
+        const id = req.params.id;
+        const task = await Task.findOne({ _id: id });
+        const project = await Project.findOne({ tasks: id });
+        if (task.length === 0 || typeof task === "undefined") {
             return res.status(200).json({
                 code: "400",
-                message: "Bạn không có quyền xóa task ",
+                message: "Task không tồn tại!!",
             });
         }
+        await Task.deleteOne({ _id: id });
+        return res.status(200).json({
+            code: "200",
+            message: "Xóa task thành công!!",
+            body: task,
+        });
+        // } else {
+        //     return res.status(200).json({
+        //         code: "400",
+        //         message: "Bạn không có quyền xóa task ",
+        //     });
+        // }
     } catch (err) {
         return res.status(500).json({ message: "Server error " + err.message });
     }
