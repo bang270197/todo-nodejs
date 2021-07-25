@@ -21,11 +21,11 @@ exports.addUserToTask = async (req) => {
 
     const task = await Task.findOne({ _id: taskid });
     //gửi email
-    await mailer.sendEmailNormal(
-        user.email,
-        contentTaskToUser.subject,
-        contentTaskToUser.template(task.title, task.priority)
-    );
+    // await mailer.sendEmailNormal(
+    //     user.email,
+    //     contentTaskToUser.subject,
+    //     contentTaskToUser.template(task.title, task.priority)
+    // );
     if (task.length || typeof task === "undefined")
         throw new Error("Task không tồn tại");
     if (user.length || typeof user === "undefined")
