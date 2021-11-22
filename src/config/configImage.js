@@ -9,5 +9,6 @@ var storage = multer.diskStorage({
 });
 //upload single file
 var upload = multer({ storage: storage });
+var a = "123";
 var b = "222";
 module.exports = { upload: upload };

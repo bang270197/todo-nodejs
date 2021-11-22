@@ -10,7 +10,7 @@ const connectDB = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-
+        ("abc");
         // await listDatabase(client);
 
         console.log("Connected successfully to server");
