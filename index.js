@@ -52,25 +52,13 @@ app.use(cors());
 route(app);
 // user bearer token
 app.use(
-	bearerToken({
-		bodyKey: "access_token",
-		queryKey: "access_token",
-		headerKey: "Bearer",
-		reqKey: "token",
-	})
+    bearerToken({
+        bodyKey: "access_token",
+        queryKey: "access_token",
+        headerKey: "Bearer",
+        reqKey: "token",
+    })
 );
-
-// Import static folder
-// app.use("/static", express.static(__dirname + "/static"));
-
-// Serve build folder
-// app.use(express.static(path.join(__dirname, "build")));
-
-// app.use(express.static("build"));
-// app.set("view engine", "ejs");
-// app.set("views", "./views");
-// Load api docs using swagger-ui
-// app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Using jsend middle ware
 app.use(jsend.middleware);
@@ -80,43 +68,24 @@ app.use(morgan("dev"));
 
 // Import API router
 session.configSession(app);
-// app.get("/", (req, res) => {
-//     res.send("Hello World!");
-// });
-// app.listen(port, () => {
-//     console.log(`Example app listening at http://localhost:${port}`);
-// });
-
-// Add not authorize route
-// var notAuthorizeRoutes = require("./routers");
-// app.use(notAuthorizeRoutes);
-
-// Handle view production
-// app.get("/*", function(req, res) {
-//     res.header("Content-Type", "text/html");
-//     return res.render("index");
-//     // res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
 
 var port = process.env.PORT || config.get("server.port");
 var dbUrlString = `mongodb://${config.get("mongodb.username")}:${config.get(
-	"mongodb.password"
+    "mongodb.password"
 )}@${config.get("mongodb.host")}:${config.get("mongodb.port")}/${config.get(
-	"mongodb.database"
+    "mongodb.database"
 )}`;
 mongoose.connect(dbUrlString, {
-	useNewUrlParser: true,
-	useCreateIndex: true,
-	useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
 });
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
-db.once("open", function() {
-	console.log("MongoDB connected");
-	app.listen(port, "0.0.0.0", () => {
-		console.log("Server is running at port:" + port);
-		// console.log("Document of apis at: localhost:5000/docs");
-	});
+db.once("open", function () {
+    console.log("MongoDB connected");
+    app.listen(port, "0.0.0.0", () => {
+        console.log("Server is running at port:" + port);
+        // console.log("Document of apis at: localhost:5000/docs");
+    });
 });
-
-
